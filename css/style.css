@@ -1,206 +1,286 @@
 /* ==========================================================================
-   1. VARIÁVEIS DE CORES E FONTES (Sua nova paleta)
+   1. IMPORTAÇÃO DE FONTES LOCAIS E VARIÁVEIS
    ========================================================================== */
+@font-face {
+    font-family: 'Vosage';
+    src: url('../assets/Fonts/Vosage.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
-    --cor-fundo: #7AA36A;      /* Verde principal (Fundo sólido da tela) */
-    --cor-verde-claro: #CFE1BD; /* Verde claro (Detalhes e sombra do botão) */
-    --cor-branco: #F5F5F5;     /* Branco (Cor do botão e pre-loader) */
+    /* Paleta Poder Feminino */
+    --cor-fundo-escuro: #161616;
+    --cor-preto: #000000;
+    --cor-cinza: #595959;
+    
+    /* Tons de Vinho/Vermelho */
+    --cor-vinho-principal: #600A18;
+    --cor-vinho-escuro: #500B15;
+    --cor-vinho-claro: #851728;
+    
+    /* Tons Claros e Dourados/Pêssego */
+    --cor-base-clara: #EFE2D6;
+    --cor-dourado-1: #D8C1AA;
+    --cor-dourado-2: #C9AD92;
+    --cor-dourado-3: #CFBDAC;
+
+    /* Fontes */
     --fonte-principal: 'Poppins', sans-serif;
+    --fonte-destaque: 'Vosage', serif; 
 }
 
 /* ==========================================================================
-   2. RESET BÁSICO
+   2. RESET BÁSICO E BODY (Nível de Aplicação Nativa)
    ========================================================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* Suaviza o toque e o scroll em dispositivos mobile */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    /* Fundo externo (para quem abrir no desktop, verá um tom escuro fora do card) */
-    background-color: #5a7b4e; 
+    background-color: var(--cor-preto); 
     font-family: var(--fonte-principal);
     display: flex;
     justify-content: center;
-    align-items: center; /* Centraliza verticalmente no desktop */
+    align-items: center;
     height: 100vh;
-    overflow: hidden; /* TRAVA O SCROLL DA PÁGINA GERAL */
+    overflow: hidden; /* Trava o fundo do desktop, isolando a Linkpage */
 }
 
 /* ==========================================================================
-   3. ESTRUTURA DA LINKPAGE (Tela Cheia e No-Scroll)
+   3. ESTRUTURA DA LINKPAGE (Responsividade Perfeita)
    ========================================================================== */
 #conteudo-pagina {
     width: 100%;
     max-width: 480px; 
-    height: 100vh; /* Trava em exatos 100% da tela */
+    height: 100vh; 
     position: relative;
-    overflow: hidden; /* Impede qualquer tipo de rolagem (No-Scroll) */
-    box-shadow: 0 0 40px rgba(207, 225, 189, 0.4); 
+    overflow-y: auto; 
+    overflow-x: hidden;
+    /* Sombra elegante que separa o card do fundo preto no desktop */
+    box-shadow: 0 0 60px rgba(216, 193, 170, 0.08); 
     display: flex;
     flex-direction: column;
+    background-color: var(--cor-fundo-escuro);
+    
+    /* Esconde a barra de rolagem nativa para um visual limpo */
+    scrollbar-width: none; 
+}
+
+#conteudo-pagina::-webkit-scrollbar {
+    display: none; 
 }
 
 /* ==========================================================================
-   4. IMAGEM DE FUNDO E MÁSCARA DE LEITURA
+   4. CABEÇALHO (Logo Topo)
    ========================================================================== */
+.cabecalho-topo {
+    position: absolute;
+    top: 35px;
+    width: 100%;
+    text-align: center;
+    z-index: 4; /* Fica acima da máscara escura */
+}
+
+.logo-cabecalho {
+    width: 30px; /* Tamanho delicado e proporcional */
+    height: auto;
+    /* Contorna o PNG exato com uma sombra para dar leitura sobre a foto */
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.6));
+}
+
+/* ==========================================================================
+   5. IMAGENS DE FUNDO ALTERNADAS E MÁSCARA (Crossfade Triplo)
+   ========================================================================== */
+.container-fundo {
+    position: fixed; 
+    width: 100%;
+    max-width: 480px; 
+    height: 100vh;
+    top: 0;
+    z-index: 1;
+}
+
 .imagem-fundo {
-    position: absolute; /* Tira a imagem do fluxo normal e permite que cubra tudo */
+    position: absolute; 
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Estica e corta apenas as sobras para cobrir a tela 100% */
-    object-position: center top; /* Foca na parte de cima da foto (sua headline) */
-    z-index: 1; /* A camada mais funda do nosso "baralho" */
+    object-fit: cover; 
+    object-position: center top; 
+    opacity: 0.85; 
 }
 
-/* O Degradê que protege a leitura do texto */
+/* Lógica Sênior do Crossfade (12 segundos totais):
+   - Ativo 7 (Fixo no fundo, sempre visível)
+   - Ativo 8 (.img-animada) cobre o 7 no meio do ciclo
+   - Ativo 9 (.img-animada-2) cobre ambos no final do ciclo
+*/
+.img-animada {
+    opacity: 0;
+    animation: crossfade1 12s ease-in-out infinite;
+}
+
+.img-animada-2 {
+    opacity: 0;
+    animation: crossfade2 12s ease-in-out infinite;
+}
+
+@keyframes crossfade1 {
+    0%, 20% { opacity: 0; }
+    30%, 50% { opacity: 0.85; } /* Tempo de tela exclusivo da Imagem 2 */
+    60%, 100% { opacity: 0; }
+}
+
+@keyframes crossfade2 {
+    0%, 55% { opacity: 0; }
+    65%, 85% { opacity: 0.85; } /* Tempo de tela exclusivo da Imagem 3 */
+    95%, 100% { opacity: 0; }
+}
+
 .mascara-escura {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 50%; /* Pega apenas a metade de baixo da tela */
-    /* Vai do preto com 70% de transparência até ficar 100% transparente no meio da tela */
-    background: linear-gradient(to top, rgba(207, 225, 189, 0.4) 0%, rgba(0,0,0,0) 100%);
-    z-index: 2; /* Fica acima da foto, mas abaixo do texto */
+    height: 75%; 
+    /* Degradê suave que protege a leitura de todos os elementos sobrepostos */
+    background: linear-gradient(to top, var(--cor-fundo-escuro) 25%, rgba(22, 22, 22, 0.8) 55%, rgba(22, 22, 22, 0) 100%);
+    z-index: 2; 
 }
 
 /* ==========================================================================
-   5. ÁREA PRINCIPAL, H1 EDITORIAL E BOTÃO "BRILHO DO SORRISO"
+   6. ÁREA PRINCIPAL E HEADLINE (Imagem)
    ========================================================================== */
 .principal {
     position: relative;
     z-index: 3; 
-    height: 100%;
+    min-height: 100vh; 
     display: flex;
     flex-direction: column;
-    
-    /* Voltamos a alinhar os elementos pela base da tela... */
     justify-content: flex-end; 
     align-items: center;
-    
-    /* ...MAS aqui está o truque de Sênior: 
-       O '20vh' no padding-bottom significa que estamos empurrando o bloco 
-       para cima em exatos 20% da altura da tela do usuário. 
-       Isso tira o texto do centro e o coloca naquele "ponto de ouro" mais abaixo. */
-    padding: 0 20px 15vh 20px; 
+    /* O padding bottom é alto para não sobrepor o footer ao rolar até o fim */
+    padding: 140px 24px 110px 24px; 
 }
 
-/* O NOVO H1: Tipografia sofisticada, estilo revista de luxo */
-.texto-cta {
-    color: var(--cor-branco); 
-    font-size: 20px; /* Levemente maior e imponente */
-    font-weight: 300; /* Letra fina e elegante */
-    letter-spacing: 1px; /* Espaçamento entre as letras (o segredo do luxo) */
-    text-align: center;
-    line-height: 1.5; 
-    margin-bottom: 35px; 
-    max-width: 360px; 
-    /* Substituímos a sombra preta por um "brilho" (glow) verde claro super suave */
-    text-shadow: 0 4px 15px rgba(207, 225, 189, 0.4); 
+.imagem-headline {
+    width: 90%;
+    max-width: 320px;
+    height: auto;
+    margin-bottom: 45px;
+    /* O drop-shadow garante que a tipografia em imagem se destaque */
+    filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.7));
 }
 
-/* O NOVO BOTÃO: Extremamente delicado, acolhedor e sutil */
-.botao-whatsapp {
+/* ==========================================================================
+   7. GRUPO DE BOTÕES (Alta Conversão, Zero Fricção)
+   ========================================================================== */
+.grupo-botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    align-items: center;
+}
+
+.botao-link {
     position: relative; 
-    overflow: hidden; 
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 12px; 
-    background-color: var(--cor-branco); 
-    color: var(--cor-fundo); 
     text-decoration: none;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px; /* Levemente ajustado para padrão mobile premium */
+    font-weight: 400; 
     text-transform: uppercase; 
-    letter-spacing: 1.5px; 
+    letter-spacing: 2px; 
     width: 100%;
     max-width: 340px;
-    padding: 20px 24px;
-    border-radius: 50px; 
-    
-    /* Sombra inicial como uma "aura" verde muito suave */
-    box-shadow: 0 8px 25px rgba(207, 225, 189, 0.4), 0 0 0 2px rgba(207, 225, 189, 0.05);
-    /* Transição lentificada para garantir a suavidade do movimento */
-    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    padding: 18px 24px;
+    border-radius: 5px; 
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
 }
 
-/* O ícone agora respira com o botão, sem giros bruscos */
-.icone-brilho {
+/* Botão Primário: WhatsApp */
+.botao-whatsapp {
+    background-color: var(--cor-vinho-principal); 
+    color: var(--cor-base-clara); 
+    border: 1px solid var(--cor-vinho-claro);
+    box-shadow: 0 8px 25px rgba(96, 10, 24, 0.3);
+}
+
+.botao-whatsapp:hover {
+    transform: translateY(-2px); 
+    background-color: var(--cor-vinho-claro);
+    box-shadow: 0 12px 30px rgba(96, 10, 24, 0.5);
+}
+
+/* Botão Secundário: Instagram */
+.botao-instagram {
+    background-color: transparent; 
+    color: var(--cor-dourado-1); 
+    border: 1px solid var(--cor-dourado-1);
+}
+
+.botao-instagram:hover {
+    transform: translateY(-2px); 
+    background-color: rgba(216, 193, 170, 0.08); 
+}
+
+/* Microinterações dos Ícones */
+.icone-botao {
     width: 18px;
     height: 18px;
-    transition: transform 0.6s ease;
+    transition: transform 0.4s ease;
 }
 
-/* INTERATIVIDADE HOVER: Um levante quase imperceptível, puro refinamento */
-.botao-whatsapp:hover {
-    transform: translateY(-2px); /* Levanta apenas 2 pixels, muito delicado */
-    /* A aura de luz se expande suavemente, sem exageros */
-    box-shadow: 0 12px 30px rgba(207, 225, 189, 0.6), 0 0 0 4px rgba(207, 225, 189, 0.15);
+.botao-link:hover .icone-botao {
+    transform: scale(1.08);
 }
 
-/* O ícone cresce minimamente (apenas 5%) */
-.botao-whatsapp:hover .icone-brilho {
-    transform: scale(1.05);
-}
-
-/* Efeito tátil de clique - suave como um toque em uma tela de vidro */
-.botao-whatsapp:active {
-    transform: translateY(1px); 
-    box-shadow: 0 5px 15px rgba(207, 225, 189, 0.3);
-    transition: all 0.1s ease; /* A volta do clique precisa ser rápida para parecer real */
+.botao-link:active {
+    transform: translateY(1px) scale(0.98); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.1s ease; 
 }
 
 /* ==========================================================================
-   A ANIMAÇÃO "BRILHO DO SORRISO" (Refinada, lenta e acetinada)
-   ========================================================================== */
-.botao-whatsapp::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -150%; /* Começa bem longe para a entrada ser gradual */
-    width: 150%; /* Feixe mais largo para a luz ser difusa, não uma linha dura */
-    height: 100%;
-    
-    /* Um degradê de luz branca, extremamente leve e translúcido */
-    background: linear-gradient(
-        to right, 
-        rgba(255,255,255,0) 0%, 
-        rgba(255, 255, 255, 0.3) 50%, /* O pico de luz é apenas 30% visível */
-        rgba(255,255,255,0) 100%
-    );
-    transform: skewX(-20deg); 
-    
-    /* Aumentamos o tempo total para 6 segundos, usando uma curva de aceleração suave */
-    animation: brilhoDelicado 6s cubic-bezier(0.25, 0.1, 0.25, 1) infinite; 
-}
-
-/* O roteiro do brilho: deslizar vagaroso e pausa acolhedora */
-@keyframes brilhoDelicado {
-    0% { left: -150%; }
-    25% { left: 150%; } /* Ele leva 1.5 segundos para atravessar (muito mais calmo) */
-    100% { left: 150%; } /* Ele repousa por 4.5 segundos antes de repetir */
-}
-
-/* ==========================================================================
-   6. RODAPÉ FLUTUANTE
+   8. RODAPÉ (Footer com Logo)
    ========================================================================== */
 .rodape {
     position: absolute;
-    bottom: 15px;
+    bottom: 25px;
     width: 100%;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.7); /* Branco levemente transparente */
+    color: var(--cor-cinza); 
     z-index: 3;
+    letter-spacing: 1px;
+}
+
+.logo-rodape {
+    width: 20px;
+    height: auto;
+    opacity: 0.6; /* Subtil e elegante no final da página */
+    transition: opacity 0.3s ease;
+}
+
+.logo-rodape:hover {
+    opacity: 1;
 }
 
 /* ==========================================================================
-   7. PRE-LOADER (Fundo Verde e Logo Desenhada)
+   9. PRE-LOADER (Performance Preservada)
    ========================================================================== */
 #preloader {
     position: fixed; 
@@ -208,7 +288,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: var(--cor-fundo); /* Mudamos o fundo para o Verde Escuro */
+    background-color: var(--cor-fundo-escuro); 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -222,36 +302,67 @@ body {
 }
 
 .logo-animada svg {
-    width: 130px; /* Deixei um pouco maior para valorizar o desenho */
+    width: 160px; 
     height: auto;
 }
 
-/* A MÁGICA DE DESENHAR A LOGO */
 .logo-animada svg .cls-1 {
-    fill: transparent; /* A logo começa vazia (transparente) */
-    stroke: var(--cor-branco); /* A linha do desenho será branca */
-    stroke-width: 1.5; /* Espessura do "lápis" */
-    
-    /* Esses dois comandos criam uma linha invisível gigante e a preparam para a animação */
-    stroke-dasharray: 3000; 
-    stroke-dashoffset: 3000; 
-    
-    /* Executa a animação 'desenharLogo' em 2.5 segundos */
+    fill: transparent; 
+    stroke: var(--cor-dourado-1); 
+    stroke-width: 0.5; 
+    stroke-dasharray: 1000; 
+    stroke-dashoffset: 1000; 
     animation: desenharLogo 2.5s ease-in-out forwards; 
 }
 
-/* O roteiro da nossa animação */
 @keyframes desenharLogo {
     0% {
-        stroke-dashoffset: 3000; /* Linha totalmente fora da tela */
+        stroke-dashoffset: 1000; 
         fill: transparent;
     }
     80% {
-        stroke-dashoffset: 0; /* Aos 80% do tempo, o desenho da linha termina */
-        fill: transparent; /* Ainda vazia */
+        stroke-dashoffset: 0; 
+        fill: transparent; 
     }
     100% {
         stroke-dashoffset: 0; 
-        fill: var(--cor-branco); /* No final, ela preenche toda de branco suavemente */
+        fill: var(--cor-dourado-1); 
+        stroke: transparent;
+    }
+}
+
+/* ==========================================================================
+   10. EFEITOS DO MOSAICO DINÂMICO E LOGO AUMENTADA
+   ========================================================================== */
+.logo-animada svg {
+    width: 160px !important; /* Ajustado para um tamanho elegante e proporcional */
+    max-width: 70vw; /* Proteção responsiva para telas pequenas */
+    position: relative;
+    z-index: 2; /* Garante que a logo fique sempre acima do mosaico */
+    filter: drop-shadow(0 0 15px rgba(216, 193, 170, 0.2)); /* Leve glow na própria logo */
+}
+
+/* Base matemática para os ícones que o JS vai criar */
+.icone-mosaico {
+    position: absolute;
+    opacity: 0;
+    z-index: 1; /* Atrás da logo */
+    pointer-events: none; /* Impede que o usuário clique neles acidentalmente */
+    /* A animação 'dancaSedutora' vai usar variáveis criadas pelo JS */
+    animation: dancaSedutora ease-in-out infinite alternate;
+}
+
+/* A coreografia da dança. O JS define para onde cada ícone vai! */
+@keyframes dancaSedutora {
+    0% {
+        transform: translate(0, 0) scale(0.8) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        opacity: var(--opacidade-max); /* Brilho suave */
+    }
+    100% {
+        transform: translate(var(--mov-x), var(--mov-y)) scale(1.2) rotate(var(--rotacao));
+        opacity: 0;
     }
 }
