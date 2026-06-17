@@ -1,0 +1,257 @@
+/* ==========================================================================
+   1. VARIÁVEIS DE CORES E FONTES (Sua nova paleta)
+   ========================================================================== */
+:root {
+    --cor-fundo: #7AA36A;      /* Verde principal (Fundo sólido da tela) */
+    --cor-verde-claro: #CFE1BD; /* Verde claro (Detalhes e sombra do botão) */
+    --cor-branco: #F5F5F5;     /* Branco (Cor do botão e pre-loader) */
+    --fonte-principal: 'Poppins', sans-serif;
+}
+
+/* ==========================================================================
+   2. RESET BÁSICO
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* Fundo externo (para quem abrir no desktop, verá um tom escuro fora do card) */
+    background-color: #5a7b4e; 
+    font-family: var(--fonte-principal);
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centraliza verticalmente no desktop */
+    height: 100vh;
+    overflow: hidden; /* TRAVA O SCROLL DA PÁGINA GERAL */
+}
+
+/* ==========================================================================
+   3. ESTRUTURA DA LINKPAGE (Tela Cheia e No-Scroll)
+   ========================================================================== */
+#conteudo-pagina {
+    width: 100%;
+    max-width: 480px; 
+    height: 100vh; /* Trava em exatos 100% da tela */
+    position: relative;
+    overflow: hidden; /* Impede qualquer tipo de rolagem (No-Scroll) */
+    box-shadow: 0 0 40px rgba(207, 225, 189, 0.4); 
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   4. IMAGEM DE FUNDO E MÁSCARA DE LEITURA
+   ========================================================================== */
+.imagem-fundo {
+    position: absolute; /* Tira a imagem do fluxo normal e permite que cubra tudo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Estica e corta apenas as sobras para cobrir a tela 100% */
+    object-position: center top; /* Foca na parte de cima da foto (sua headline) */
+    z-index: 1; /* A camada mais funda do nosso "baralho" */
+}
+
+/* O Degradê que protege a leitura do texto */
+.mascara-escura {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%; /* Pega apenas a metade de baixo da tela */
+    /* Vai do preto com 70% de transparência até ficar 100% transparente no meio da tela */
+    background: linear-gradient(to top, rgba(207, 225, 189, 0.4) 0%, rgba(0,0,0,0) 100%);
+    z-index: 2; /* Fica acima da foto, mas abaixo do texto */
+}
+
+/* ==========================================================================
+   5. ÁREA PRINCIPAL, H1 EDITORIAL E BOTÃO "BRILHO DO SORRISO"
+   ========================================================================== */
+.principal {
+    position: relative;
+    z-index: 3; 
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    /* Voltamos a alinhar os elementos pela base da tela... */
+    justify-content: flex-end; 
+    align-items: center;
+    
+    /* ...MAS aqui está o truque de Sênior: 
+       O '20vh' no padding-bottom significa que estamos empurrando o bloco 
+       para cima em exatos 20% da altura da tela do usuário. 
+       Isso tira o texto do centro e o coloca naquele "ponto de ouro" mais abaixo. */
+    padding: 0 20px 15vh 20px; 
+}
+
+/* O NOVO H1: Tipografia sofisticada, estilo revista de luxo */
+.texto-cta {
+    color: var(--cor-branco); 
+    font-size: 20px; /* Levemente maior e imponente */
+    font-weight: 300; /* Letra fina e elegante */
+    letter-spacing: 1px; /* Espaçamento entre as letras (o segredo do luxo) */
+    text-align: center;
+    line-height: 1.5; 
+    margin-bottom: 35px; 
+    max-width: 360px; 
+    /* Substituímos a sombra preta por um "brilho" (glow) verde claro super suave */
+    text-shadow: 0 4px 15px rgba(207, 225, 189, 0.4); 
+}
+
+/* O NOVO BOTÃO: Extremamente delicado, acolhedor e sutil */
+.botao-whatsapp {
+    position: relative; 
+    overflow: hidden; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px; 
+    background-color: var(--cor-branco); 
+    color: var(--cor-fundo); 
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase; 
+    letter-spacing: 1.5px; 
+    width: 100%;
+    max-width: 340px;
+    padding: 20px 24px;
+    border-radius: 50px; 
+    
+    /* Sombra inicial como uma "aura" verde muito suave */
+    box-shadow: 0 8px 25px rgba(207, 225, 189, 0.4), 0 0 0 2px rgba(207, 225, 189, 0.05);
+    /* Transição lentificada para garantir a suavidade do movimento */
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); 
+}
+
+/* O ícone agora respira com o botão, sem giros bruscos */
+.icone-brilho {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.6s ease;
+}
+
+/* INTERATIVIDADE HOVER: Um levante quase imperceptível, puro refinamento */
+.botao-whatsapp:hover {
+    transform: translateY(-2px); /* Levanta apenas 2 pixels, muito delicado */
+    /* A aura de luz se expande suavemente, sem exageros */
+    box-shadow: 0 12px 30px rgba(207, 225, 189, 0.6), 0 0 0 4px rgba(207, 225, 189, 0.15);
+}
+
+/* O ícone cresce minimamente (apenas 5%) */
+.botao-whatsapp:hover .icone-brilho {
+    transform: scale(1.05);
+}
+
+/* Efeito tátil de clique - suave como um toque em uma tela de vidro */
+.botao-whatsapp:active {
+    transform: translateY(1px); 
+    box-shadow: 0 5px 15px rgba(207, 225, 189, 0.3);
+    transition: all 0.1s ease; /* A volta do clique precisa ser rápida para parecer real */
+}
+
+/* ==========================================================================
+   A ANIMAÇÃO "BRILHO DO SORRISO" (Refinada, lenta e acetinada)
+   ========================================================================== */
+.botao-whatsapp::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%; /* Começa bem longe para a entrada ser gradual */
+    width: 150%; /* Feixe mais largo para a luz ser difusa, não uma linha dura */
+    height: 100%;
+    
+    /* Um degradê de luz branca, extremamente leve e translúcido */
+    background: linear-gradient(
+        to right, 
+        rgba(255,255,255,0) 0%, 
+        rgba(255, 255, 255, 0.3) 50%, /* O pico de luz é apenas 30% visível */
+        rgba(255,255,255,0) 100%
+    );
+    transform: skewX(-20deg); 
+    
+    /* Aumentamos o tempo total para 6 segundos, usando uma curva de aceleração suave */
+    animation: brilhoDelicado 6s cubic-bezier(0.25, 0.1, 0.25, 1) infinite; 
+}
+
+/* O roteiro do brilho: deslizar vagaroso e pausa acolhedora */
+@keyframes brilhoDelicado {
+    0% { left: -150%; }
+    25% { left: 150%; } /* Ele leva 1.5 segundos para atravessar (muito mais calmo) */
+    100% { left: 150%; } /* Ele repousa por 4.5 segundos antes de repetir */
+}
+
+/* ==========================================================================
+   6. RODAPÉ FLUTUANTE
+   ========================================================================== */
+.rodape {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7); /* Branco levemente transparente */
+    z-index: 3;
+}
+
+/* ==========================================================================
+   7. PRE-LOADER (Fundo Verde e Logo Desenhada)
+   ========================================================================== */
+#preloader {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--cor-fundo); /* Mudamos o fundo para o Verde Escuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; 
+    transition: opacity 0.8s ease, visibility 0.8s ease; 
+}
+
+.escondido {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.logo-animada svg {
+    width: 130px; /* Deixei um pouco maior para valorizar o desenho */
+    height: auto;
+}
+
+/* A MÁGICA DE DESENHAR A LOGO */
+.logo-animada svg .cls-1 {
+    fill: transparent; /* A logo começa vazia (transparente) */
+    stroke: var(--cor-branco); /* A linha do desenho será branca */
+    stroke-width: 1.5; /* Espessura do "lápis" */
+    
+    /* Esses dois comandos criam uma linha invisível gigante e a preparam para a animação */
+    stroke-dasharray: 3000; 
+    stroke-dashoffset: 3000; 
+    
+    /* Executa a animação 'desenharLogo' em 2.5 segundos */
+    animation: desenharLogo 2.5s ease-in-out forwards; 
+}
+
+/* O roteiro da nossa animação */
+@keyframes desenharLogo {
+    0% {
+        stroke-dashoffset: 3000; /* Linha totalmente fora da tela */
+        fill: transparent;
+    }
+    80% {
+        stroke-dashoffset: 0; /* Aos 80% do tempo, o desenho da linha termina */
+        fill: transparent; /* Ainda vazia */
+    }
+    100% {
+        stroke-dashoffset: 0; 
+        fill: var(--cor-branco); /* No final, ela preenche toda de branco suavemente */
+    }
+}
